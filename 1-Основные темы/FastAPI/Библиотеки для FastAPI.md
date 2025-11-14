@@ -49,3 +49,8 @@ pip install alembic
 pip install python-dotenv
 ```
 Данная библиотека помогает читать файл конфигурации .env.
+
+```
+pip install pydantic-settings 
+```
+А эта создает класс для более удобного взаимодействия с настройками

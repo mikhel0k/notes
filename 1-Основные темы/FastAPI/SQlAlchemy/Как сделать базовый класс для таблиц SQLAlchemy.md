@@ -3,7 +3,7 @@
 ```
 from datetime import datetime  
   
-from sqlalchemy import Integer, DateTime  
+from sqlalchemy import Integer, DateTime, func
 from sqlalchemy.orm import DeclarativeBase, declared_attr, Mapped, mapped_column
 ```
 Импортируем все необходимые библиотеки, для базовой настройки этого класса достаточно будет `from sqlalchemy.orm import DeclarativeBase`, этой командой мы импортируем класс от которого мы от наследуем базовый класс.
@@ -30,10 +30,15 @@ id: Mapped[int] = mapped_column(
     Integer, primary_key=True, autoincrement=True  
 )  
 created_at: Mapped[datetime] = mapped_column(  
-    DateTime, default=datetime.utcnow  
+    DateTime,  
+    server_default=func.now(),  
+    nullable=False,  
 )  
 updated_at: Mapped[datetime] = mapped_column(  
-    DateTime, default=datetime.utcnow, onupdate=datetime.utcnow  
+    DateTime,  
+    server_default=func.now(),  
+    server_onupdate=func.now(),  
+    nullable=False,  
 )
 ```
 Тут объявляются поля таблицы, у каждой таблицы которая будет наследоваться от этого класса, будут эти поля, а конкретно:
