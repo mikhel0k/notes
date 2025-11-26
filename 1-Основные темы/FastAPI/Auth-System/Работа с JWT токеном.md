@@ -13,3 +13,5 @@ jwt.encode(data_dict, settings.JWT_PRIVATE_KEY.read_text(), algorithm=settings.A
 ```
 jwt.decode(token, settings.JWT_PUBLIC_KEY.read_text(), algorithm=settings.ALGORITHM)
 ```
+
+Чтобы правильно работать с созданными файлами ознакомьтесь [[Настройка settings для использования токенов сохраненных в файлах]]
