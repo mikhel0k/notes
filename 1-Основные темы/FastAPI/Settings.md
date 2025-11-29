@@ -1,3 +1,4 @@
+#settings #настройки #pydantic #FastAPI
 При помощи библиотеки `pydantic_settings` можно считывать информацию из .env файла и работать с ней в дальнейшем как с классом
 
 ```
@@ -14,10 +15,14 @@ class Settings(BaseSettings):
     DB_USER: str  
     DB_PASSWORD: str  
     model_config = SettingsConfigDict(  
-        env_file=os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".env")  
-    )
+    
+
+	class Config:  
+	    env_file = ".env"  
+	    env_file_encoding = "utf-8"  
+	    case_sensitive = True
 ```
-Наследуемся от базового класса BaseSettings, прописываем все поля которые хотим получить из .env файла и в model_config мы записываем путь к .env файлу
+Наследуемся от базового класса BaseSettings, прописываем все поля которые хотим получить из .env файла и в Config мы записываем информацию про .env файл
 
 ```
 settings = Settings()
@@ -25,8 +30,14 @@ settings = Settings()
 Потом для удобства взаимодействия создаем объект настроек который будем в дальнейшем импортировать по программе
 
 ```
-def get_db_url():  
-    return (f"postgresql+asyncpg://{settings.DB_USER}:{settings.DB_PASSWORD}@"  
-            f"{settings.DB_HOST}:{settings.DB_PORT}/{settings.DB_NAME}")
+@property  
+def DATABASE_URL(self) -> str:  
+    return (f"postgresql+asyncpg://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@"  
+            f"{self.POSTGRES_HOST}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}")  
+  
+@property  
+def SYNC_DATABASE_URL(self) -> str:  
+    return (f"postgresql://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@"  
+            f"{self.POSTGRES_HOST}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}")
 ```
-Также можем написать функцию, которая будет автоматически генерировать строку для выполнения подключения к базе данных
+Также можем в классе прописать propery поля для того чтобы генерировалась ссылка на подключение

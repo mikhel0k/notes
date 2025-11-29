@@ -1,4 +1,4 @@
-
+#JWT_токен #авторизация #регистрация #settings #настройки
 ```
 import os  
 from pathlib import Path   
